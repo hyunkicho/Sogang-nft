@@ -1,7 +1,7 @@
 function getTokenMetaData(tokenId) {
     try{
-      if((tokenId < 1) || (tokenId > 100)) {
-        alert("token ID should be 1~100!"); 
+      if((tokenId < 0) || (tokenId > 5)) {
+        alert("token ID should be 0~5!"); 
       }else {
         $.ajax({
           type: "get",
@@ -14,12 +14,6 @@ function getTokenMetaData(tokenId) {
           console.log("json success", json);
           $("#nft-image").attr("src", json.image);
           $("#token_name").text(json.name);
-          $("#attributes_accordion").empty();
-          for (let i = 0; i < json.attributes.length; i++) {
-            $("#attributes_accordion").append(
-              `<p id="attributes"> ${json.attributes[i].trait_type}  :  ${json.attributes[i].value} </p>`
-            );
-          }
         });
       }
     } catch (err){
@@ -53,7 +47,7 @@ function getTokenMetaData(tokenId) {
       console.log($("#token-id").val());
       const nftPrice = await erc721Token.getNftPrice();
       const displayNftPrice = nftPrice.toString()/(10**18);
-      $("#current-price").text(displayNftPrice);
+      $("#current-price").text(`${displayNftPrice} DRM tokens for 1 nft`);
       //checksum address 로 비교해야 한다.
       const accountChecksum = ethers.utils.getAddress(accounts[0]);
 

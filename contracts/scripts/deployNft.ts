@@ -4,7 +4,7 @@ async function main() {
   console.log('deploying TestToken contract')
   const ERC721 = await ethers.getContractFactory("TestNFT");
   const tokenPrice = 10**18;
-  const ERC20 = "0x39e813A5c0C98066C9c8Ebe1E6a2B23Bf2bE4357";
+  const ERC20 = "0xD6a94b4676D159A3729B8Ac5F81E1DCB95ADb789";
   const erc721 = await ERC721.deploy(tokenPrice.toString(), ERC20);
   await erc721.deployed();
 

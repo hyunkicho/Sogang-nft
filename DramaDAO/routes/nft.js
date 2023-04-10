@@ -8,7 +8,7 @@ const axios = require("axios");
 router.get('/nft_metadata', async (req, res) => {
   let tokenId = req.query.tokenId;
   const response = await axios.get(
-    `https://raw.githubusercontent.com/dogeum-network/nft-baseuri/main/metadatas/${tokenId}`
+    `https://raw.githubusercontent.com/hyunkicho/Sogang-nft/main/contracts/metadata_character/${tokenId}`
   );
   const data = response.data;
   console.log("data back is ", data)

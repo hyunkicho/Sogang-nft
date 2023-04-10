@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 import "@openzeppelin/contracts/token/ERC1155/presets/ERC1155PresetMinterPauser.sol";
 
-contract MyERC1155 is ERC1155PresetMinterPauser {
+contract TestERC1155 is ERC1155PresetMinterPauser {
     constructor() ERC1155PresetMinterPauser("1") {
         setURI(0,"metadata_collectible_bad/0");
         mint(msg.sender,0,10,''); //data is needed only when neccessary
