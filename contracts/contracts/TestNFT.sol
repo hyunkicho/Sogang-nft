@@ -26,7 +26,7 @@ contract TestNFT is ERC721, ERC721Burnable, Ownable, EIP712, ERC721Votes {
         setTokenAddress(testTokenAddress_);
         setNftPrice(tokenAmount_);
         //InitialTokenURI
-        setbaseURI("https://raw.githubusercontent.com/dogeum-network/nft-baseuri/main/metadatas/");
+        setbaseURI("https://raw.githubusercontent.com/hyunkicho/Sogang-nft/main/contracts/metadata_character/");
         //tokenID 0 is for test
         mint(msg.sender);
     }

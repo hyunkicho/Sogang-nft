@@ -1,29 +1,50 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
-import "@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC1155/presets/ERC1155PresetMinterPauser.sol";
 
-contract TestToken is ERC20PresetMinterPauser, Ownable {
-    event TokenBuy(address indexed buyer, uint256 amount);
-    event WithdrawETH(address indexed withdrawer ,uint256 amount);
-    constructor() ERC20PresetMinterPauser("TestToken", "TT") {
-    }
-    function buyToken() payable public {
-        require(msg.value > 0, "MyERC20: vaulue has to be bigger than zero");
-        uint256 mintAmount= getExchangeRate(msg.value);
-        _mint(msg.sender, mintAmount);
-        emit TokenBuy(msg.sender, mintAmount);
+contract MyERC1155 is ERC1155PresetMinterPauser {
+    constructor() ERC1155PresetMinterPauser("1") {
+        setURI(0,"series1/0");
+        setURI(1,"series1/1");
+        setURI(2,"series2/0");
+        mint(msg.sender,0,10,''); //data is needed only when neccessary
     }
 
-    function getExchangeRate(uint256 ethAmount) public view returns (uint256) {
-        //원래 decimal이 18이기 때문에 뒤에 0을 3개 더해주면 된다.
-        uint256 tokenAmount = ethAmount*1000;
-        return tokenAmount;
+    using Strings for uint256;
+
+    // Optional base URI
+    string private _baseURI = "https://raw.githubusercontent.com/hyunkicho/blockchain101/main/erc721/metadata/";
+
+    // Optional mapping for token URIs
+    mapping(uint256 => string) private _tokenURIs;
+
+    function uri(uint256 tokenId) public view virtual override returns (string memory) {
+        string memory tokenURI = _tokenURIs[tokenId];
+
+        // If token URI is set, concatenate base URI and tokenURI (via abi.encodePacked).
+        return bytes(tokenURI).length > 0 ? string(abi.encodePacked(_baseURI, tokenURI)) : super.uri(tokenId);
     }
 
-    function withdrawAll() public onlyOwner {
-        address payable to = payable(msg.sender);
-        uint256 withdrawBalance = address(this).balance;
-        to.transfer(withdrawBalance);
-        emit WithdrawETH(msg.sender, withdrawBalance);
-    }}
+    function setURI(uint256 tokenId, string memory tokenURI) public {
+        _setURI(tokenId, tokenURI);
+    }
+
+    /**
+     * @dev Sets `tokenURI` as the tokenURI of `tokenId`.
+     */
+    function _setURI(uint256 tokenId, string memory tokenURI) internal virtual {
+        _tokenURIs[tokenId] = tokenURI;
+        emit URI(uri(tokenId), tokenId);
+    }
+
+    function setBaseURI(string memory baseURI) public {
+        _setBaseURI(baseURI);
+    }
+
+    /**
+     * @dev Sets `baseURI` as the `_baseURI` for all tokens
+     */
+    function _setBaseURI(string memory baseURI) internal virtual {
+        _baseURI = baseURI;
+    }
+}
