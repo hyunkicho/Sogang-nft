@@ -13,11 +13,11 @@ contract TestGovernor is Governor, GovernorCountingSimple, GovernorVotes, Ownabl
     {}
 
     function votingDelay() public pure override returns (uint256) {
-        return 9; // 9 block to snap shot
+        return 3; // 3 block to snap shot
     }
 
     function votingPeriod() public pure override returns (uint256) {
-        return 30; // 30 block to vote
+        return 60; // 60 block to vote
     }
 
     // // The following functions are overrides required by Solidity.
@@ -26,7 +26,7 @@ contract TestGovernor is Governor, GovernorCountingSimple, GovernorVotes, Ownabl
      */
     function quorum(uint256 blockNumber) public view virtual override returns (uint256) {
         //원할 시 정족수에 대한 로직 추가 가능
-        return 2;
+        return 3;
     }
 
     function quorumReached(uint256 proposalId) public view returns (bool){

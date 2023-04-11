@@ -238,6 +238,9 @@ $(document).ready(async function () {
     $(`#targets`).text(`${find_data.targets}`)
     $("#cast_list").append(`<br><text-primary id="calldatas">  </label></br>`);
     $(`#calldatas`).text(`${find_data.calldatas}`)
+    $("#cast_list").append(`<br><text-primary id="quorom">  </label></br>`);
+    let quorom = await governor.quorumReached(find_data.proposalId)
+    $(`#quorom`).text(`현재 ${quorom}개의 투표권이 행사되었습니다.`)
     }) 
 
     $("#execute").click(async function (event) {
