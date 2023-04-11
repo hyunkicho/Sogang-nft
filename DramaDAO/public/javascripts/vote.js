@@ -240,7 +240,7 @@ $(document).ready(async function () {
     $(`#calldatas`).text(`${find_data.calldatas}`)
     $("#cast_list").append(`<br><text-primary id="quorom">  </label></br>`);
     let quorom = await governor.quorumReached(find_data.proposalId)
-    $(`#quorom`).text(`현재 ${quorom}개의 투표권이 행사되었습니다.`)
+    $(`#quorom`).text(`현재 정족수 도달 상황 ${quorom}`)
     }) 
 
     $("#execute").click(async function (event) {

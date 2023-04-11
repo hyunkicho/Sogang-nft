@@ -42,6 +42,16 @@
                   id="proposal-input"
                   placeholder="DAO에 제안할 안건을 추가해주세요"
                 />
+                <label for="inputEthAmount" class="form-label"
+                  >NFT 데이터 확인</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="tokenURI"
+                  placeholder="원하는 데이터가 맞는지 확인하세요"
+                />
+
 
                 <div class="mb-3">
                   <button class="btn btn-primary" type="button" id="proposalbtn">
@@ -91,6 +101,7 @@
     <script src="javascripts/crypto.js"></script>
     <script src="javascripts/jsgrid.js"></script>
     <script src="src/abi/MyERC721.js"></script>
+    <script src="src/abi/MyERC1155.js"></script>
     <script src="src/abi/MyGovernor.js"></script>
     <script src="src/utils/noExponents.js"></script>
     <script
@@ -129,6 +140,8 @@
     const governor = new ethers.Contract(GOVERNOR, abi_governor, signer);
     let abi_erc721 = JSON.parse(JSON.stringify(MYERC721.abi));
     const erc721Token = new ethers.Contract(ERC721, abi_erc721, signer);
+    let abi_erc1155 = JSON.parse(JSON.stringify(MYERC1155.abi));
+    const erc1155Token = new ethers.Contract(ERC1155, abi_erc1155, signer);
     const accounts = await ethereum.request({
       method: "eth_requestAccounts",
     });
@@ -151,36 +164,6 @@
       console.log(weight)
       $("#weigth").text(weight);
     })
-
-    $("#proposalbtn").click(async function (event) {
-      event.preventDefault();
-      // changeTokenURICalldata = erc721Token.interface.encodeFunctionData("transfer", ["newuri"]);
-      const proposalExplain = $("#proposal-input").val();
-      governorCalldata =
-        governor.interface.encodeFunctionData("propose",[
-        [GOVERNOR],
-        [0],
-        ['0x'],
-        proposalExplain
-        ]);
-      let data = ethereum
-        .request({
-          method: "eth_sendTransaction",
-          params: [
-            {
-              from: accounts[0],
-              to: GOVERNOR,
-              value: "0",
-              data: governorCalldata,
-            },
-          ],
-        })
-        //TODO 트랜잭션이 완료되었다고 띄우면서 트랜잭션 해시 보여주기
-        .then((txHash) => alert(txHash))
-        .catch((error) => console.error(error));
-    });
-
-
 
     $("#delegate").click(async function (event) {
       event.preventDefault();
@@ -210,12 +193,24 @@
       // changeTokenURICalldata = erc721Token.interface.encodeFunctionData("transfer", ["newuri"]);
       const proposalExplain = $("#proposal-input").val();
       console.log("proposalExplain >>", proposalExplain);
+
+      const happyEndingURI = "metadata_collectible_good/0"
+      $("#tokenURI").val(happyEndingURI);
+
+      const tokenURI = $("#tokenURI").val();
+
+      setURICalldata =
+      erc1155Token.interface.encodeFunctionData("setURI",[
+          0,
+          tokenURI
+        ]);
+
       governorCalldata =
         governor.interface.encodeFunctionData("propose",[
-        [ERC721],
+        [ERC1155],
         [0],
-        ['0x'],
-        'proposalExplain'
+        [setURICalldata],
+        proposalExplain
         ]);
       let data = ethereum
         .request({
